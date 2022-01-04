@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+@media screen and (min-width:100px) {
+	body {
+		margin: 0 auto;
+	}
+	header {
+		width: 100%; 
+		text-align : center;
+		background-color: black;
+		height: 185px;
+	}
+	.gohome {
+		text-decoration: none;
+		color: white;
+		font-size: 40px;
+		float: left;
+		padding: 20px 0px 0px 40px;
+	}
+	.gohome:hover {
+		color: white;
+	}
+	header>div>nav {
+		width: 100%;
+		float: right;
+		padding: 40px;
+	}
+	header>div>nav>a {
+		width: 100%;
+		text-decoration: none;
+		color: white;
+		padding: 40px;
+		text-align: center;
+	}
+	header>div>nav>a:hover {
+		color: orange;
+	}
+	footer {
+		float: left;
+		width: 100%;
+		background: black;
+	}
+	footer>div {
+		width: 1200px;
+		margin: 0 auto;
+	}
+	footer>div>div {
+		position: relative;
+		float: left;
+		width: 100%;
+		padding: 50px 0 50px 300px;
+		box-sizing: border-box;
+	}
+	footer .company {
+		position: absolute;
+		left: 0;
+		top: 115px;
+		color: white;
+		font-weight: 700;
+		font-size: 26px;
+		line-height: 26px;
+	}
+	footer .company span {
+		font-weight: 350;
+		font-size: 16px;
+		line-height: 20px;
+	}
+	footer .box {
+		float: left;
+		width: 100%;
+	}
+	footer .link {
+		float: left;
+		width: 100%;
+		margin-bottom: 40px;
+		padding-bottom: 40px;
+		border-bottom: 1px solid #2c2d34;
+	}
+	footer .link a {
+		display: inline-block;
+		margin-right: 85px;
+		color: white;
+	}
+	footer .info {
+		position: relative;
+		float: left;
+		width: 100%;
+		margin-bottom: 50px;
+		padding-left: 295px;
+		box-sizing: border-box;
+		font-weight: 350;
+		font-size: 14px;
+		color: white;
+	}
+	footer .info ul {
+		float: left;
+		margin-top: 70px;
+	}
+	footer .info dl {
+		margin-top: 70px;
+	}
+	footer .info ul:first-child {
+		margin-right: 95px;
+	}
+	footer .info ul:last-child {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	footer .info li:first-child, footer .info dt {
+		margin-bottom: 10px;
+	}
+	footer .info li em {
+		font-weight: 350;
+		font-size: 18px;
+		line-height: 18px;
+		color: #c58b3a;
+	}
+	footer .copy {
+		float: left;
+		width: 100%;
+		font-weight: 350;
+		font-size: 12px;
+		color: #777777;
+	}
+	.reserve {
+		float: right;
+	}
+	.reserve>a {
+		text-decoration: none;
+		color: black;
+		padding: 0px 10px 0px 0px;
+	}
+	.reserve>a:hover {
+		color: gray;
+		text-decoration: underline;
+	}
+}
