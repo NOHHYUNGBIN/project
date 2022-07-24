@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="user">
+ 	<!-- 회원가입 -->
+ 	<insert id="insertUser">
+ 		insert into user_tbl(USERID, USERPASS, NICKNAME, USERNAME, EMAIL, TEL)
+ 		 values(#{userid},#{userpass},#{nickname},#{username},#{email},#{tel})
+ 	</insert>
+ 	
+ 	<!-- 아이디 중복체크 -->
+ 	<select id="idCheck" 
+ 			parameterType="hashmap"
+ 			resultType="int">
+ 		
+ 		select count(*) from user_tbl where userid = #{userid}
+ 	
+ 	</select>
+
+ 	<!-- 별명 중복체크 -->
+ 	<select id="nicknameCheck" 
+ 			parameterType="hashmap"
+ 			resultType="int">
+ 		select count(*) from user_tbl where nickname = #{nickname}
+ 	
+ 	</select>
+  	<!-- 이메일 중복체크 -->
+ 	<select id="emailCheck" 
+ 			parameterType="hashmap"
+ 			resultType="int">
+ 		select count(*) from user_tbl where email = #{email}
+ 	
+ 	</select>
+ 	
+ 	<!-- 로그인 -->
+ 	<select id="login"
+ 			parameterType="hashmap"
+ 			resultType="com.spring.user.vo.UserVo">
+ 		select *
+ 		 from user_tbl
+ 		 where userid = #{userid}
+ 		 and   userpass = #{userpass}
+ 	</select>
+ 	
+ 	<!-- 회원정보 변경전 기존값 뿌려주기-->
+ 	<select id="getUserInfo"
+ 			resultType="com.spring.user.vo.UserVo">
+ 		select * from user_tbl
+ 		where userid = #{userid}
+ 	</select>
+ 	
+ 	<update id="updateUser">
+ 		update user_tbl
+ 		 set nickname = #{nickname},
+ 		     username = #{username},
+ 		     userpass = #{userpass},
+ 		     email = #{email},
+ 		     tel = #{tel}
+ 		 where userid = #{userid}    
+ 	</update>
+ </mapper>

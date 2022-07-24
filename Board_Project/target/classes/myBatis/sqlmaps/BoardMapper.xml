@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<!-- 게시물을 한페이에 10개씩 볼수있게하는 쿼리 헤더 -->
+	<sql id="paging_header">
+		select *
+		from (
+			select rownum rn, a.*
+			from (
+	</sql>
+
+	<!-- 게시물을 한페이에 10개씩 볼수있게하는 쿼리 푸터 -->
+	<sql id="paging_footer">
+			) a
+		)
+		where rn between #{ start } and #{ end }
+	</sql>
+
+	<!-- 메뉴 아이디와 검색조건에 맞는 총 게시글 갯수 -->
+	<select id="countBoard" resultType="int">
+		select count(*) 
+        from board b, user_tbl u
+		where b.userid = u.userid
+		<choose>
+			<when test="search_option == 'all' ">
+				and (nickname like '%'||#{keyword}||'%'
+				or cont like '%' || #{keyword}||'%'
+				or title like '%'||#{keyword}||'%')
+			</when>
+			<otherwise>
+				and ${search_option} like '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+		<if test="menu_id gt 0">
+			and menu_id = #{menu_id}
+		</if>
+
+	</select>
+
+
+	<!-- 페이징 처리와 댓글갯수를 위한 조회 -->
+	<select id="selectBoard" parameterType="hashmap"
+		resultType="com.spring.board.vo.BoardVo">
+		<include refid="paging_header" />
+		select b.idx,b.menu_id,b.title,b.cont,b.userid,u.nickname,b.regdate,b.readcount,
+		(select count(*) from reply where idx = b.idx)replycnt
+		from board b, user_tbl u
+        where u.userid = b.userid
+		<choose>
+			<when test="search_option == 'all' ">
+				and (nickname like '%'||#{keyword}||'%'
+				or cont like '%' || #{keyword}||'%'
+				or title like '%'||#{keyword}||'%')
+			</when>
+			<otherwise>
+				and ${search_option} like '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+		<if test="menu_id gt 0">
+			and menu_id = #{menu_id}
+		</if>
+		order by idx desc
+		<include refid="paging_footer" />
+	</select>
+
+	<!-- 게시글상세 -->
+	<select id="getView" resultType="com.spring.board.vo.BoardVo">
+		select b.idx,b.title,b.cont,b.userid,u.nickname,b.regdate,b.readcount
+		from board b, user_tbl u
+        where b.userid = u.userid and idx = #{idx}
+       </select>
+
+	<!-- 게시글등록 -->
+	<insert id="insertBoard">
+		insert into board(idx,title,menu_id,cont,userid)
+		values (seq_board.nextval,#{title},#{menu_id},#{cont},#{userid})
+	</insert>
+
+	<!-- 게시글수정 -->
+	<update id="updateBoard">
+		update board set title=#{title}, cont=#{cont}
+		where idx=#{idx}
+	</update>
+
+	<!-- 게시글삭제 -->
+	<update id="deleteBoard">
+		update board set title='삭제된 게시글 입니다.', cont='삭제된 게시글 입니다.'
+		where idx=#{idx}
+	</update>
+
+	<!-- 게시글 조회수증가 -->
+	<update id="updateReadCount">
+		update board set readcount = (select readcount from board where idx =
+		#{viewIdx})+1
+		where idx = #{viewIdx}
+	</update>
+
+	<!-- 댓글리스트 -->
+	<select id="getReply" resultType="com.spring.board.vo.ReplyVo">
+
+		<include refid="paging_header" />
+		select idx,rno,userid,cont,regdate,
+        (select nickname from user_tbl where userid = r.userid)nickname
+		from reply r
+		where idx = #{idx}
+		order by rno desc
+		<include refid="paging_footer" />
+	</select>
+
+	<!-- 댓글등록 -->
+	<insert id="insertReply">
+		insert into reply(idx,rno,userid,cont)
+		values(#{idx, jdbcType=INTEGER },reply_seq.nextval,#{userid,
+		jdbcType=VARCHAR},#{cont, jdbcType=VARCHAR})
+
+	</insert>
+
+	<!-- 댓글수정 -->
+	<update id="updateReply">
+		update reply set cont = #{cont}
+		where rno = #{rno}
+	</update>
+
+	<!-- 댓글삭제 -->
+	<delete id="deleteReply">
+		delete from reply where rno = #{rno}
+	</delete>
+
+	<select id="countReply" resultType="int">
+		select count(*) from reply
+		where idx = #{idx}
+	</select>
+
+</mapper>
